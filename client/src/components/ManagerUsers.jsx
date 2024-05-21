@@ -29,10 +29,10 @@ const ManagerUsers = () => {
     const { data,refetch} = useGetUsersQuery()
     const dt = useRef(null);
     const cols = [
-        { field: 'userName', header: 'שם' },
-        { field: 'name', header: 'סוג' },
-        { field: 'email', header: 'מייל' },
-        { field: 'phone', header: ' טלפון' }
+        { field: 'userName', header: 'userName' },
+        { field: 'name', header: 'name' },
+        { field: 'email', header: 'email' },
+        { field: 'phone', header: ' phone' }
     ];
 
     const exportCSV = (selectionOnly) => {
@@ -65,7 +65,7 @@ const ManagerUsers = () => {
                 <div className="flex justify-content-start">
                     <span className="p-input-icon-right">
                         <i className="pi pi-search" />
-                        <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="חיפוש לקוח" />
+                        <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="search" />
                     </span>
                 </div>
                 <div className="flex align-items-center justify-content-end gap-2">
@@ -91,8 +91,8 @@ const ManagerUsers = () => {
                     {cols.map((col, index) => (
                         <Column style={{textAlign:'right'}} className='cul' key={index} field={col.field} header={col.header} />
                     ))}
-                    <Column className='cul' body={updateTemplate} header='עריכה' style={{width:"50px"}}/>
-                    <Column className='cul' body={deleteuser} header='מחיקה' style={{width:"50px"}}/>
+                    <Column className='cul' body={updateTemplate} header='update' style={{width:"50px"}}/>
+                    <Column className='cul' body={deleteuser} header='delete' style={{width:"50px"}}/>
                 </DataTable>
             </div>
         </>
