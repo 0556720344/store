@@ -39,7 +39,6 @@ const UpdateUser = () => {
   
     useEffect(() => {
         if (error) {
-            console.log(error, " error");
         }
     }, [isError])
 
@@ -51,7 +50,6 @@ const UpdateUser = () => {
     // Function to handle form submission
     const handleUpdate = (e) => {
         e.preventDefault();
-        console.log(formData, " uuuuuuuuppppppddddddddaaaaaaaaaaaattttttttttttteeeeeeeeeeee");
         updateUserFunc(formData)
 
         setVisible(false)

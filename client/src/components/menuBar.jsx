@@ -27,6 +27,10 @@ const MenuBar = () => {
      const user = FromToken()
  //const user={};
 
+
+ window.addEventListener('beforeunload', function() {
+    alert("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+});
     // const router = useRouter();
 
     const accept = () => {
@@ -47,7 +51,6 @@ const MenuBar = () => {
     };
 
     useEffect(() => {
-        console.log(user, ' user');
     }, [user])
 
 
@@ -269,6 +272,7 @@ const MenuBar = () => {
 
         </div>
     );
+
 
     return (
         <>

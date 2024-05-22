@@ -8,10 +8,8 @@ const DeleteProduct = (props) => {
     const [visibleDel, setVisibleDel] = useState(false);
     const toast = useRef(null);
     const [deleteProductFunc, { isError, error, isSuccess, data }] = useDeleteProductMutation()
-    console.log(props.id, "iiiiiiiiiiiiiiiiiiiiiiddddddddddddddddddddd");
 
     const accept = () => {
-        console.log(props.id, "iiiiiiiiiiiiiiiiiiiiiiddddddddddddddddddddd");
 
         deleteProductFunc(props.id)
         toast.current.show({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });

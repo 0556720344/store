@@ -29,7 +29,6 @@ const Login = () => {
   // Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
     loginFunc(formData)
   };
   const handleRegister = (e) => {

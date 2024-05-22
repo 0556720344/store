@@ -24,7 +24,6 @@ const AdminBeds = () => {
     const navigate = useNavigate()
 
     const handleUpdateProduct=(product)=>{
-        console.log('pppppppppppppppppppppp    ',product);
         navigate('/updateProduct/'+product._id)
     
     }
@@ -44,15 +43,12 @@ const AdminBeds = () => {
 
 
     useEffect(() => {
-        console.log('data     ', data);
     }, [data]);
 
     useEffect(() => {
-        console.log('error   ', error);
     }, [error]);
 
     useEffect(() => {
-        console.log('load   ', isLoading);
     }, [isLoading]);
 
 

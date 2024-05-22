@@ -10,7 +10,6 @@ const DeleteUser = (props) => {
     const [deleteUserFunc, { isError, error, isSuccess, data }] = useDeleteUserMutation()
 
     const accept = () => {
-        console.log(props._id, "iiiiiiiiiiiiiiiiiiiiiiddddddddddddddddddddd");
 
         deleteUserFunc(props._id)
         toast.current.show({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });

@@ -52,13 +52,11 @@ for (const product of products) {
         user.cart=user.cart.filter(cart=>cart.prod!=prod._id&&cart._id!=prod._id)
     })
     const updadeUser=await user.save()
-    console.log(updadeUser,"++++++++++++++++++++++++++++++++++++++++++++");
     res.json(order)
 }
 
 const getOrderById = async (req,res) => {
     const {_id} = req.params
-    console.log(_id)
     const order = await Order.findById({_id}).lean()
     if (!order) {
         return res.status(400).json(" not found order")

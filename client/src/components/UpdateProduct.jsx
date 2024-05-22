@@ -22,7 +22,6 @@ const UpdateProduct = (props) => {
     const [selectedCity, setSelectedCity] = useState(props.product.category);
     // const params = useParams();
     const location = useLocation();
-    console.log(props, "params  params")
     // console.log(location.state, "ppppppp")
 
 
@@ -44,13 +43,11 @@ const UpdateProduct = (props) => {
 
     useEffect(() => {
         if (error) {
-            console.log(error, " error");
         }
     }, [isError])
 
     useEffect(() => {
         if (data) {
-            console.log(data, " data******************");
         }
     }, [data])
 
@@ -59,7 +56,6 @@ const UpdateProduct = (props) => {
     const handleUpdate = (e) => {
 
         e.preventDefault();
-        console.log(formData, " uuuuuuuuppppppddddddddaaaaaaaaaaaattttttttttttteeeeeeeeeeee");
         updateProductFunc(formData)
         props.refetch()
         setVisible(false)

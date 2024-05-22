@@ -13,41 +13,80 @@ const Cart = () => {
     const [cart, setCart] = useState();
     const [val, setValue] = useState(0);
 
-    const {
-        data,
-        refetch
-    } = useGetCartQuery();
+    const { data, error, isError, refetch} = useGetCartQuery();
+
     const [addToCart] = useAddToCartMutation()
 
     const [addOrder, { isError: isErrorOrd, error: errorOrd }] = useAddOrderMutation()
-   
-    useEffect(() => {
-        if (isErrorOrd)
-            alert(errorOrd.data)
-
-    }, [isErrorOrd])
 
     useEffect(() => {
-        setCart(data)
-    }, [data]);
-    const handlesubmit = () => {
+        if (!isError && data) {
+            setCart(data);
+        } else {
+            setCart([]);
+        }
+    }, [data, isError]);
+    
+    const handlesubmit = async () => {
         let prices = 0
         cart.forEach(element => {
             prices += element.prod.price * element.qty
         });
         alert("you have to pay " + prices)
-        handleBuy()
+        await handleBuy()
     }
-    const handleBuy = async() => {
+    const handleBuy = async () => {
         await addOrder({ products: cart });
         await refetch();
         await setCart([]);
     }
     const addOrd = async (e, prod) => {
-        await addToCart({ prod, qty: e.value }).then((res) => {
-        })
-        setValue(e.value)
+
+        const updatedCart = cart.map(item => {
+            if (item.prod._id === prod) {
+                console.log("prod",prod);
+                console.log("item",item);
+                if(e.value!=0){
+                    console.log("oooooooooooo",{ ...item, qty: e.value });
+                    return { ...item, qty: e.value };
+
+                }
+            }
+            console.log("oooooooo item", item);
+            return item;
+        });
+        console.log(updatedCart,"*************************cart");
+    
+        // Check if the updated quantity is 0 for the last item in the cart
+        if (updatedCart.length === 1 && updatedCart[0].qty === 0) {
+            setCart([]); // Reset the cart to an empty array
+        } else {
+            setCart(updatedCart);
+        }
+    
+        await addToCart({ prod, qty: e.value });
+
+        // setValue(e.value);
+
+        
+        // const updatedCart = cart.map(item => {
+        //     if (item.prod.id === prod.id) {
+        //         return { ...item, qty: e.value };
+        //     }
+        //     return item;
+        // });
+
+        // await addToCart({ prod, qty: e.value }).then((res) => {
+        //     setValue(e.value);
+        //     //setCart(updatedCart);
+
+        // })
+
+        // // await addToCart({ prod, qty: e.value }).then((res) => {
+        // // })
+        // // setValue(e.value)
     }
+
 
     const toast = useRef(null);
 
@@ -101,7 +140,7 @@ const Cart = () => {
                                     <div></div>
                                     <Toast ref={toast} />
                                     <div className="card flex justify-content-center">
-                                        <InputNumber min={0} value={product.qty} onValueChange={(e) => addOrd(e, product.prod._id)} showButtons buttonLayout="vertical" style={{ width: '4rem' }}
+                                        <InputNumber min={0} max={product.prod.qty} value={product.qty} onValueChange={(e) => addOrd(e, product.prod._id)} showButtons buttonLayout="vertical" style={{ width: '4rem' }}
                                             decrementButtonClassName="p-button-secondary" incrementButtonClassName="p-button-secondary" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
                                     </div>
                                     {getFormErrorMessage('checked')}
@@ -130,11 +169,11 @@ const Cart = () => {
     return (
         <div className="card">
             <DataView value={cart} listTemplate={listTemplate} />
-            <Button type="submit" label="Buy" onClick={() => (handlesubmit())} />
+            <Button type="submit" label="Buy"  onClick={() => (handlesubmit())} />
 
         </div>
     )
 }
 
-
 export default Cart
+

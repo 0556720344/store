@@ -27,7 +27,6 @@ const Register = () => {
   useEffect(() => {
     if (isSuccess) {
         
-        console.log(data);
     //   dispatch(setToken(data))
       navigate("/login")
     }
@@ -37,7 +36,6 @@ const Register = () => {
   // Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
     registerFunc(formData)
     setVisible(false)
   };

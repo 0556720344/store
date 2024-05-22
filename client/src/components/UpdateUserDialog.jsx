@@ -38,13 +38,10 @@ const UpdateUserDialog = ({ user,refetch}) => {
     })
 
     useEffect(() => {
-        if (formData)
-            console.log("formData", formData);
     }, [formData])
     useEffect(() => {
-        if (error) {
-            console.log(error, " error");
-        }
+        // if (error) {
+        // }
     }, [isError])
 
     // useEffect(() => {
@@ -55,7 +52,6 @@ const UpdateUserDialog = ({ user,refetch}) => {
     // Function to handle form submission
     const handleUpdate = (e) => {
         e.preventDefault();
-        console.log(formData,"user!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         updateUserFunc(formData)
         refetch()
         setVisible(false)

@@ -3,6 +3,7 @@ const Product = require("../models/Product")
 const jwt = require('jsonwebtoken')
 const Enum = ['custumer', 'admin']
 const mongoose = require('mongoose')
+const { use } = require("../routes/userRouts")
 
 const getAllUsers = async (req, res) => {
     if (req.user.role === 'admin') {
@@ -45,7 +46,6 @@ const createNewUser = async (req, res) => {
 // }
 const getUserById = async (req, res) => {
     const { _id } = req.params
-    console.log(_id)
     const user = await User.findById({ _id }, { password: 0 }).lean()
     if (!user) {
         return res.status(400).json(" not found user")
@@ -54,7 +54,6 @@ const getUserById = async (req, res) => {
 }
 
 const updateUser = async (req, res) => {
-    console.log("ggggggggggggggggggggggggggggggggggggggg");
     const { _id, userName, password, name, email, phone, role, cart } = req.body
 
     if (req.user.role === 'admin') {
@@ -76,7 +75,6 @@ const updateUser = async (req, res) => {
     user.phone = phone ? phone : user.phone
     user.role = role ? role : user.role
     user.cart = cart ? cart : user.cart
-    console.log(user);
     const myUpdateuser = await user.save()
     const userInfo = {
         _id: user._id, name: user.name,
@@ -90,40 +88,91 @@ const updateUser = async (req, res) => {
 
 const addToCart = async (req, res) => {
 
-    const { prod, qty } = req.body
-    console.log("a " + qty);
-    if (!prod)
-        return res.status(400).json("fieldes required")
-    const user = await User.findById(req.user._id, { password: 0 }).exec()
-    if (!user)
-        return res.status(400).json("user not found")
-    const validProd = new mongoose.Types.ObjectId(prod)
-    let arr = []
-    if (user.cart.find(p => p.prod.equals(validProd))) {
-        if (Number(qty) > 1)
-            user.cart = user.cart.map(p => p.prod.equals(validProd) ? { prod: validProd, qty: Number(qty) } : p)
-        else user.cart = user.cart.map(p => p.prod.equals(validProd) ? { prod: validProd, qty: p.qty + 1 } : p)
-    }
-    else user.cart.push({ prod: validProd, qty: 1 })
-    console.log(user.cart);
-    // if (from=="addOne") {
-    //     console.log("addOne");
-    //     if (user.cart.find(p => p.prod.equals(validProd)))
-    //         user.cart = user.cart.map(p => p.prod.equals(validProd) ? { prod: validProd, qty: p.qty + 1 } : p)
 
-    //     else
-    //         user.cart.push({ prod: validProd, qty: 1 })
-    // }
-    // else {
-    //     if (user.cart.find(p => p.prod.equals(validProd)))
+    const { prod, qty } = req.body;
+    if (!prod) {
+        return res.status(400).json("Fields are required");
+    }
+
+    try {
+        const user = await User.findById(req.user._id, { password: 0 });
+
+        if (!user) {
+            return res.status(400).json("User not found");
+        }
+
+        const validProd = new mongoose.Types.ObjectId(prod);
+
+        let updatedCart = user.cart;
+
+        // Check if the cart already contains the product
+        const index = user.cart.findIndex(item => item.prod.equals(validProd));
+
+        if (index !== -1) {
+            if (Number(qty) > 0) {
+                updatedCart[index].qty = Number(qty);
+            } else {
+                updatedCart = user.cart.filter(item => !item.prod.equals(validProd));
+            }
+        } else {
+            updatedCart.push({ prod: validProd, qty: 1 });
+        }
+
+        user.cart = updatedCart;
+        const myUpdateUser = await user.save();
+
+        res.json(myUpdateUser);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json("Internal Server Error");
+    }
+
+
+    // const { prod, qty } = req.body
+    // if (!prod)
+    //     return res.status(400).json("fieldes required")
+    // const user = await User.findById(req.user._id, { password: 0 }).exec()
+    // if (!user)
+    //     return res.status(400).json("user not found")
+    // const validProd = new mongoose.Types.ObjectId(prod)
+    // let arr = []
+    // if (user.cart.find(p => p.prod.equals(validProd))) {
+    //     if (Number(qty) > 0)
+    //         user.cart = user.cart.map(p => p.prod.equals(validProd) ? { prod: validProd, qty: Number(qty) } : p)
+    //     if (Number(qty) === 0)
     //     {
-    //         user.cart = user.cart.map(p => p.prod.equals(validProd) ? { prod: validProd, qty } : p)
+            
+    //         user.cart.forEach((uc)=>
+    //         {
+    //            if(!uc.prod.equals(validProd))
+    //                 arr.push(uc)
+    //         })
+    //         user.cart=arr;
     //     }
-    //     else
-    //         user.cart.push({ prod: validProd, qty })
     // }
-    const myUpdateuser = await user.save()
-    res.json(myUpdateuser)
+    // else 
+    // {
+    //     user.cart.push({ prod: validProd, qty: 1 })
+    // }
+    // // if (from=="addOne") {
+    // //     console.log("addOne");
+    // //     if (user.cart.find(p => p.prod.equals(validProd)))
+    // //         user.cart = user.cart.map(p => p.prod.equals(validProd) ? { prod: validProd, qty: p.qty + 1 } : p)
+
+    // //     else
+    // //         user.cart.push({ prod: validProd, qty: 1 })
+    // // }
+    // // else {
+    // //     if (user.cart.find(p => p.prod.equals(validProd)))
+    // //     {
+    // //         user.cart = user.cart.map(p => p.prod.equals(validProd) ? { prod: validProd, qty } : p)
+    // //     }
+    // //     else
+    // //         user.cart.push({ prod: validProd, qty })
+    // // }
+    
+    // const myUpdateuser = await user.save()
+    // res.json(myUpdateuser)
 }
 
 
@@ -134,7 +183,8 @@ const addToCart = async (req, res) => {
 const getCart = async (req, res) => {
     const user = await User.findById(req.user._id, { password: 0 }).populate('cart.prod').lean()
     if (!user?.cart?.length)
-        return res.status(400).json("no cart")
+        return res.status(400).json("no cart");
+    console.log("cart*********************************", user.cart);
     res.json(user.cart)
 
 }

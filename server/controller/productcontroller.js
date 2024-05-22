@@ -8,7 +8,6 @@ const getAllProducts = async (req,res) => {
 }
 
 const createNewProduct = async (req,res) => { 
-    console.log('user ', req.user)
     if(req.user.role==='admin'){
         const { name,code, image, category ,description,price,qty} = req.body
 
@@ -32,7 +31,6 @@ const createNewProduct = async (req,res) => {
 
 const getProductById = async (req,res) => {
     const {_id} = req.params
-    console.log(_id)
     const product = await Product.findById({_id}).lean()
     if (!product) {
         return res.status(400).json(" not found product")
@@ -84,8 +82,7 @@ const deleteProduct = async (req,res)=> {
     if(req.user.role==='admin'){
 
     const {_id}=req.params
-console.log(_id," id////////////////////////////////////////////////////////////");
-    console.log(_id);
+    
     const product=await Product.findById(_id).exec()
 
     if(!product)

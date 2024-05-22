@@ -58,7 +58,6 @@ const Home = () => {
 
 
     useEffect(() => {
-      console.log(data,'   data');
       setProducts(data);
     }, [data]);
 

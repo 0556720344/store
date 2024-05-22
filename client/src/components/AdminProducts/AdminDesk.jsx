@@ -24,7 +24,6 @@ const AdminDesks = () => {
     const navigate = useNavigate()
 
     const handleUpdateProduct=(product)=>{
-        console.log('pppppppppppppppppppppp    ',product);
         navigate('/updateProduct/'+product._id)
     
     }

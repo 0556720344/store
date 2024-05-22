@@ -24,7 +24,6 @@ const ProductList = () => {
     const navigate = useNavigate()
 
     const handleUpdateProduct=(product)=>{
-        console.log('pppppppppppppppppppppp    ',product);
         navigate('/updateProduct/'+product._id)
     
     }
@@ -46,15 +45,12 @@ const ProductList = () => {
 
 
     useEffect(() => {
-        console.log('data     ', data);
     }, [data]);
 
     useEffect(() => {
-        console.log('error   ', error);
     }, [error]);
 
     useEffect(() => {
-        console.log('load   ', isLoading);
     }, [isLoading]);
 
 

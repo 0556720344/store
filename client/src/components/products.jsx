@@ -29,7 +29,6 @@ const Products = () => {
     const [addToCart] = useAddToCartMutation()
 
     const handleAddToCart=(prod,qty)=>{
-        console.log({prod,qty}," prod qty");
         addToCart({prod,qty,from:"addOne"})
 
     }
@@ -40,15 +39,12 @@ const Products = () => {
     // const galleria = useRef(null);
 
     useEffect(() => {
-        console.log('data     ', data);
     }, [data]);
 
     useEffect(() => {
-        console.log('error   ', error);
     }, [error]);
 
     useEffect(() => {
-        console.log('load   ', isLoading);
     }, [isLoading]);
 
     // const itemTemplate = (item) => {
